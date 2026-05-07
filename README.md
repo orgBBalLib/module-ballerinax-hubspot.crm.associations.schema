@@ -1,230 +1,114 @@
-# Ballerina HubSpot CRM Associations schema connector
+
+# Ballerina hubspot.crm.associations.schema connector
 
 [![Build](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations.schema/actions/workflows/ci.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations.schema/actions/workflows/ci.yml)
+[![Trivy](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations.schema/actions/workflows/trivy-scan.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations.schema/actions/workflows/trivy-scan.yml)
+[![GraalVM Check](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations.schema/actions/workflows/build-with-bal-test-graalvm.yml/badge.svg)](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations.schema/actions/workflows/build-with-bal-test-graalvm.yml)
 [![GitHub Last Commit](https://img.shields.io/github/last-commit/ballerina-platform/module-ballerinax-hubspot.crm.associations.schema.svg)](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations.schema/commits/master)
 [![GitHub Issues](https://img.shields.io/github/issues/ballerina-platform/ballerina-library/module/hubspot.crm.associations.schema.svg?label=Open%20Issues)](https://github.com/ballerina-platform/ballerina-library/labels/module%hubspot.crm.associations.schema)
 
 ## Overview
 
-[HubSpot](https://www.hubspot.com/) is an AI-powered customer relationship management (CRM) platform.
+[HubSpot](https://www.hubspot.com/) is a cloud-based customer relationship management (CRM) platform that helps businesses manage marketing, sales, customer service, and content management through an integrated suite of tools designed to drive growth and customer engagement.
 
-The `ballerinax/module-ballerinax-hubspot.crm.associations.schema` connector offers APIs to connect and interact with the [Hubspot Associations Schema API](https://developers.hubspot.com/docs/reference/api/crm/associations/associations-schema) endpoints, specifically based on the [HubSpot REST API](https://developers.hubspot.com/docs/reference/api).
-
+The `ballerinax/hubspot.crm.associations.schema` package offers APIs to connect and interact with [HubSpot CRM Associations Schema API](https://developers.hubspot.com/docs/api/crm/associations) endpoints, specifically based on [HubSpot CRM API v4](https://developers.hubspot.com/docs/api/crm/associations/v4).
 ## Setup guide
 
-You need a HubSpot developer account and an associated app with API access to use the HubSpot Associations schema connector. If you don’t have one, register for a HubSpot developer account first.
+To use the HubSpot CRM Associations Schema connector, you must have access to the HubSpot API through a [HubSpot developer account](https://developers.hubspot.com/) and obtain an API access token. If you do not have a HubSpot account, you can sign up for one [here](https://app.hubspot.com/signup-hubspot/crm).
 
-### Step 1: Login to a HubSpot developer account
+### Step 1: Create a HubSpot Account
 
-If you don't have a HubSpot Developer Account, you can sign up for a free account [here](https://developers.hubspot.com/get-started)
+1. Navigate to the [HubSpot website](https://www.hubspot.com/) and sign up for an account or log in if you already have one.
 
-If you have an account already, go to the [HubSpot developer portal](https://app.hubspot.com/)
+2. If you intend to use private apps for API access, note that certain API features and rate limits may vary based on your subscription. While free accounts provide basic API access, Professional or Enterprise plans offer higher rate limits and access to additional API endpoints.
 
-### Step 2: Create a developer test account (optional)
+### Step 2: Generate an API Access Token
 
-Within app developer accounts, you can create a [developer test account](https://developers.hubspot.com/beta-docs/getting-started/account-types#developer-test-accounts) under your account to test apps and integrations without affecting any real HubSpot data.
+1. Log in to your HubSpot account.
 
-> **Note:** These accounts are only for development and testing purposes. In production, you should not use developer test accounts.
+2. In the main navigation bar, click the settings icon (gear icon) in the top right corner.
 
-1. Go to the Test accounts section from the left sidebar.
-    ![Test accounts section](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.associations.schema/refs/heads/main/docs/resources/test-account.png)
+3. In the left sidebar menu, navigate to Integrations > Private Apps.
 
-2. Click the `Create developer test account` button in the top right corner.
-    ![Create developer test account](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.associations.schema/refs/heads/main/docs/resources/create-test-account.png)
+4. Click Create a private app.
 
-3. In the pop-up window, provide a name for the test account and click the `Create` button.
-    ![Create test account](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.associations.schema/refs/heads/main/docs/resources/create-account.png)
-    You will see the newly created test account in the list of test accounts.
-    ![Test account portal](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.associations.schema/refs/heads/main/docs/resources/test-account-portal.png)
+5. On the Basic Info tab, enter a name and description for your app.
 
-### Step 3: Create a HubSpot app
+6. Navigate to the Scopes tab and select the required scopes for CRM associations schema access (such as `crm.schemas.associations.read` and `crm.schemas.associations.write`).
 
-1. Navigate to the `Apps` section in the left sidebar and click the `Create app` button in the top right corner.
-    ![Create app](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.associations.schema/refs/heads/main/docs/resources/create-app.png)
+7. Click Create app in the top right corner, then review the information and click Continue creating.
 
-2. Provide a public app name and description for your app.
-    ![App name and description](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.associations.schema/refs/heads/main/docs/resources/app-name-desc.png)
+8. Once created, your access token will be displayed. Click Show token to reveal and copy your private app access token.
 
-### Step 4: Setup authentication
-
-1. Move to the `Auth` tab.
-    ![Configure authentication](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.associations.schema/refs/heads/main/docs/resources/config-auth.png)
-
-2. Add the following scopes for your app using the `Add new scopes` button in the `Scopes` section.
-
-- `crm.objects.contacts.read`
-- `crm.objects.contacts.write`
-- `crm.objects.companies.read`
-- `crm.objects.companies.write`
-- `crm.objects.deals.read`
-- `crm.objects.deals.write`
-- `crm.objects.line_items.read`
-- `crm.objects.line_items.write`
-- `crm.objects.custom.read`
-- `crm.objects.custom.write`
-
-    ![Add scopes](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.associations.schema/refs/heads/main/docs/resources/add-scopes.png)
-
-3. Add the redirect URL for your app in the `Redirect URL` section. This is the URL where the user will be redirected after authentication. You can use `localhost` for testing purposes. Then click the `Create App` button.
-
-    ![Redirect URL](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.associations.schema/refs/heads/main/docs/resources/redirect-url.png)
-
-### Step 5: Get the client ID and client secret
-
-Navigate to the `Auth` tab to see your app's `Client ID` and `Client Secret`. Make sure to save these values.
-
-![Client ID and Client Secret](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.associations.schema/refs/heads/main/docs/resources/client-id-secret.png)
-
-### Step 6: Setup authentication flow
-
-Before proceeding with the Quickstart, ensure you have obtained the access token or refresh token using the following steps:
-
-1. Create an authorization URL using the following format:
-
-    ```
-    https://app.hubspot.com/oauth/authorize?client_id=<YOUR_CLIENT_ID>&scope=<YOUR_SCOPES> redirect_uri=<YOUR_REDIRECT_URI>
-    ```
-
-    Replace the `<YOUR_CLIENT_ID>`, `<YOUR_REDIRECT_URI>` and `<YOUR_SCOPES>` with your specific value.
-
-2. Paste it in the browser and select your developer test account to install the app when prompted.
-    ![Account select](https://raw.githubusercontent.com/ballerina-platform/module-ballerinax-hubspot.crm.associations.schema/refs/heads/main/docs/resources/account-select.png)
-
-3. A code will be displayed in the browser. Copy the code.
-
-4. Run the following `curl` command. Replace the `<YOUR_CLIENT_ID>`, `<YOUR_REDIRECT_URI>` and `<YOUR_CLIENT_SECRET>` with your specific value. Use the code you received in the above step 3 as the `<CODE>`.
-
-    **Linux/macOS (Bash)**
-
-    Use the following `curl` command in your terminal:
-
-    ```bash
-    curl --location "https://api.hubapi.com/oauth/v1/token" \
-    --header "Content-Type: application/x-www-form-urlencoded" \
-    --data-urlencode "grant_type=authorization_code" \
-    --data-urlencode "code=<CODE>" \
-    --data-urlencode "redirect_uri=<YOUR_REDIRECT_URI>" \
-    --data-urlencode "client_id=<YOUR_CLIENT_ID>" \
-    --data-urlencode "client_secret=<YOUR_CLIENT_SECRET>"
-    ```
-
-    **Windows (CMD)**
-
-    Use the following `curl` command in Command Prompt:
-
-    ```bash
-    curl --location "https://api.hubapi.com/oauth/v1/token" ^
-    --header "Content-Type: application/x-www-form-urlencoded" ^
-    --data-urlencode "grant_type=authorization_code" ^
-    --data-urlencode "code=<CODE>" ^
-    --data-urlencode "redirect_uri=<YOUR_REDIRECT_URI>" ^
-    --data-urlencode "client_id=<YOUR_CLIENT_ID>" ^
-    --data-urlencode "client_secret=<YOUR_CLIENT_SECRET>"
-    ```
-
-    This command will return the access token and refresh token which are necessary for API calls.
-
-    ```json
-    {
-        "token_type": "bearer",
-        "refresh_token": "<Refresh Token>",
-        "access_token": "<Access Token>",
-        "expires_in": 1800
-    }
-    ```
-
-5. Store the refresh token securely for use in your application.
-
-6. If you are using testing tools (e.g., Postman, Insomnia) or need to manually refresh the token for testing, run the following `curl` command to refresh the access token when it expires, make a POST request to the HubSpot OAuth endpoint.
-Replace the `<YOUR_REFRESH_TOKEN>`, `<YOUR_CLIENT_ID>`, and `<YOUR_CLIENT_SECRET>` with your specific value.
-
-    **Linux/macOS (Bash)**
-
-    Use the following `curl` command in your terminal:
-
-    ```bash
-    curl --request POST \
-    --url https://api.hubapi.com/oauth/v1/token \
-    --header 'content-type: application/x-www-form-urlencoded' \
-    --data 'grant_type=refresh_token&refresh_token=<YOUR_REFRESH_TOKEN>&client_id=<YOUR_CLIENT_ID>&client_secret=<YOUR_CLIENT_SECRET>'
-    ```
-
-    **Windows (CMD)**
-
-    Use the following `curl` command in your command prompt:
-
-    ```bash
-    curl --request POST ^
-    --url https://api.hubapi.com/oauth/v1/token ^
-    --header 'content-type: application/x-www-form-urlencoded' ^
-    --data 'grant_type=refresh_token&refresh_token=<YOUR_REFRESH_TOKEN>&client_id=<YOUR_CLIENT_ID>&client_secret=<YOUR_CLIENT_SECRET>'
-    ```
-
+> **Tip:** You must copy and store this key somewhere safe. It won't be visible again after you navigate away from this page for security reasons.
 ## Quickstart
 
-To use the `Hubspot CRM Associations Schema` connector in your Ballerina application, update the `.bal` file as follows:
+To use the `HubSpot CRM Associations Schema` connector in your Ballerina application, update the `.bal` file as follows:
 
 ### Step 1: Import the module
 
-Import the `hubspot.crm.associations.schema` module and `oauth2` module.
-
 ```ballerina
 import ballerina/oauth2;
-import ballerinax/hubspot.crm.associations.schema as hsschema;
+import ballerinax/hubspot.crm.associations.schema as hscrmschema;
 ```
 
 ### Step 2: Instantiate a new connector
 
-1. Create a `Config.toml` file and, configure the obtained credentials in the above steps as follows:
+1. Create a `Config.toml` file and configure the obtained credentials:
 
-    ```toml
-    clientId = <Client Id>
-    clientSecret = <Client Secret>
-    refreshToken = <Refresh Token>
-    ```
+```toml
+clientId = "<Your_Client_Id>"
+clientSecret = "<Your_Client_Secret>"
+refreshToken = "<Your_Refresh_Token>"
+```
 
-2. Instantiate a `hsschema:ConnectionConfig` with the obtained credentials and initialize the connector with it.
+2. Create a `hscrmschema:ConnectionConfig` and initialize the client:
 
-    ```ballerina
-    configurable string clientId = ?;
-    configurable string clientSecret = ?;
-    configurable string refreshToken = ?;
-    hsschema:OAuth2RefreshTokenGrantConfig auth = {
+```ballerina
+configurable string clientId = ?;
+configurable string clientSecret = ?;
+configurable string refreshToken = ?;
+
+final hscrmschema:Client hscrmschemaClient = check new ({
+    auth: {
         clientId,
         clientSecret,
         refreshToken,
         credentialBearer: oauth2:POST_BODY_BEARER
-    };
-    final hsschema:Client hubspot = check new ({ auth });
-    ```
+    }
+});
+```
 
 ### Step 3: Invoke the connector operation
 
-Now, utilize the available connector operations. A sample usecase is shown below.
+Now, utilize the available connector operations.
 
-#### Read all association definitions from objects contact to deals
+#### Create an association label
 
 ```ballerina
-final string fromObjectType = "contacts";
-final string toObjectType = "deals";
-
 public function main() returns error? {
-    hsschema:CollectionResponseAssociationSpecWithLabelNoPaging associations = 
-        check hubspot->/[fromObjectType]/[toObjectType]/labels;
-    io:println("Contact-Deal Association definitions: ", associations);
+    hscrmschema:PublicAssociationDefinitionCreateRequest newLabel = {
+        name: "partner_relationship",
+        label: "Partner",
+        inverseLabel: "Partner Of"
+    };
+
+    hscrmschema:CollectionResponseAssociationSpecWithLabelNoPaging response = check hscrmschemaClient->/["contacts"]/["companies"]/labels.post(newLabel);
 }
 ```
 
+### Step 4: Run the Ballerina application
+
+```bash
+bal run
+```
 ## Examples
 
-The `HubSpot CRM Associations schema` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations.schema/tree/main/examples), covering the following use cases.
+The `hubspot.crm.associations.schema` connector provides practical examples illustrating usage in various scenarios. Explore these [examples](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations.schema/tree/main/examples), covering the following use cases:
 
-1. [Association definition analytics report](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations.schema/tree/main/examples/association_analytics_report) : Analyzes association definition configurations between object types (e.g., `contacts` to `deals`) in HubSpot, categorizing them and generating a count-based report.
-
-2. [Automated association defnition configuration update](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations.schema/tree/main/examples/automated_configuration_update) : Manages Doctor-Patient associations by updating them dynamically based on status changes (`Pandemic`, `Emergency`, `Normal`, or `Special`).
-
-3. [Association definition management](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations.schema/tree/main/examples/companies_association_management) : Creates and manages custom associations (`Headquarters-Franchise`) between two `companies` objects, including reading, updating, and deleting associations.
-
+1. [Companies association management](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations.schema/tree/main/examples/companies_association_management) - Demonstrates how to manage and configure associations between company records in HubSpot CRM.
+2. [Association analytics report](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations.schema/tree/main/examples/association_analytics_report) - Illustrates generating analytics reports based on association schema data.
+3. [Automated configuration update](https://github.com/ballerina-platform/module-ballerinax-hubspot.crm.associations.schema/tree/main/examples/automated_configuration_update) - Shows how to automate the updating of association schema configurations programmatically.
 ## Build from the source
 
 ### Setting up the prerequisites
@@ -234,13 +118,13 @@ The `HubSpot CRM Associations schema` connector provides practical examples illu
     * [Oracle JDK](https://www.oracle.com/java/technologies/downloads/)
     * [OpenJDK](https://adoptium.net/)
 
-   > **Note:** After installation, remember to set the `JAVA_HOME` environment variable to the directory where JDK was installed.
+    > **Note:** After installation, remember to set the `JAVA_HOME` environment variable to the directory where JDK was installed.
 
 2. Download and install [Ballerina Swan Lake](https://ballerina.io/).
 
 3. Download and install [Docker](https://www.docker.com/get-started).
 
-   > **Note**: Ensure that the Docker daemon is running before executing any tests.
+    > **Note**: Ensure that the Docker daemon is running before executing any tests.
 
 4. Export Github Personal access token with read package permissions as follows,
 
@@ -310,6 +194,7 @@ For more information, go to the [contribution guidelines](https://github.com/bal
 ## Code of conduct
 
 All the contributors are encouraged to read the [Ballerina Code of Conduct](https://ballerina.io/code-of-conduct).
+
 
 ## Useful links
 

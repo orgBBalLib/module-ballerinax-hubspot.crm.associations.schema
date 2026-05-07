@@ -19,75 +19,125 @@
 
 import ballerina/http;
 
+# Batch response containing association definition user configurations with potential errors.
 public type BatchResponsePublicAssociationDefinitionUserConfigurationWithErrors record {
+    # The date and time when the batch operation completed.
     string completedAt;
+    # The total number of errors encountered during the batch operation.
     int:Signed32 numErrors?;
+    # The date and time when the batch operation was requested.
     string requestedAt?;
+    # The date and time when the batch operation started processing.
     string startedAt;
+    # A map of related resource URLs for the batch response.
     record {|string...;|} links?;
+    # Array of successfully processed association definition user configurations.
     PublicAssociationDefinitionUserConfiguration[] results;
+    # Array of errors encountered during the batch operation.
     StandardError[] errors?;
-    "PENDING"|"PROCESSING"|"CANCELED"|"COMPLETE" status;
+    # The current processing status of the batch operation.
+    "CANCELED"|"COMPLETE"|"PENDING"|"PROCESSING" status;
 };
 
+# Represents a standard error response in the HubSpot API, providing detailed information about an error that occurred during an API request
 public type StandardError record {
+    # A more specific error category within each main category
     record {} subCategory?;
+    # Additional context-specific information related to the error
     record {|string[]...;|} context;
+    # URLs linking to documentation or resources associated with the error
     record {|string...;|} links;
+    # A unique ID for the error instance
     string id?;
+    # The main category of the error
     string category;
+    # A human-readable string describing the error and possible remediation steps
     string message;
+    # The detailed error objects
     ErrorDetail[] errors;
+    # The HTTP status code associated with the error
     string status;
 };
 
+# Request payload for creating a new association definition between CRM objects.
 public type PublicAssociationDefinitionCreateRequest record {
+    # An optional descriptor that clarifies the reverse relationship in the association
     string inverseLabel?;
+    # The unique identifier for the association definition
     string name;
+    # A descriptor that provides context about the relationship between two associated CRM objects
     string? label;
 };
 
+# Collection response containing association definition user configurations without pagination.
 public type CollectionResponsePublicAssociationDefinitionUserConfigurationNoPaging record {
+    # Array of association definition user configurations.
     PublicAssociationDefinitionUserConfiguration[] results;
 };
 
+# Batch input containing an array of association specifications to process.
 public type BatchInputPublicAssociationSpec record {
+    # Array of association specifications to be processed in batch.
     PublicAssociationSpec[] inputs;
 };
 
+# Batch response containing results from association definition configuration updates.
 public type BatchResponsePublicAssociationDefinitionConfigurationUpdateResult record {
+    # The date and time when the batch update operation was completed
     string completedAt;
+    # The date and time when the batch update operation was requested
     string requestedAt?;
+    # The date and time when the batch update operation started
     string startedAt;
+    # URLs linking to documentation or resources associated with the batch update operation
     record {|string...;|} links?;
+    # Array of association definition configuration update results.
     PublicAssociationDefinitionConfigurationUpdateResult[] results;
-    "PENDING"|"PROCESSING"|"CANCELED"|"COMPLETE" status;
+    # The current status of the batch update operation, which can be CANCELED, COMPLETE, PENDING, or PROCESSING
+    "CANCELED"|"COMPLETE"|"PENDING"|"PROCESSING" status;
 };
 
+# Result object containing updated association definition configuration details.
 public type PublicAssociationDefinitionConfigurationUpdateResult record {
+    # The maximum number of object IDs that a user can enforce for associations
     int:Signed32 userEnforcedMaxToObjectIds?;
+    # An integer value used to uniquely identify a specific association type within its Association Category
     int:Signed32 typeId;
-    "HUBSPOT_DEFINED"|"USER_DEFINED"|"INTEGRATOR_DEFINED" category;
+    # The category of the association, which can be HUBSPOT_DEFINED, INTEGRATOR_DEFINED, or USER_DEFINED
+    "HUBSPOT_DEFINED"|"INTEGRATOR_DEFINED"|"USER_DEFINED"|"WORK" category;
 };
 
+# Request payload for updating an association definition configuration.
 public type PublicAssociationDefinitionConfigurationUpdateRequest record {
+    # A unique identifier for the association type
     int:Signed32 typeId;
-    "HUBSPOT_DEFINED"|"USER_DEFINED"|"INTEGRATOR_DEFINED" category;
+    # Specifies the category of the association, which can be HUBSPOT_DEFINED, INTEGRATOR_DEFINED, or USER_DEFINED
+    "HUBSPOT_DEFINED"|"INTEGRATOR_DEFINED"|"USER_DEFINED"|"WORK" category;
+    # Defines the maximum number of target object IDs that can be associated
     int:Signed32 maxToObjectIds;
 };
 
+# Request payload for creating a new association definition configuration.
 public type PublicAssociationDefinitionConfigurationCreateRequest record {
+    # An integer used to uniquely identify a specific association type within its category
     int:Signed32 typeId;
-    "HUBSPOT_DEFINED"|"USER_DEFINED"|"INTEGRATOR_DEFINED" category;
+    # Specifies the category of the association, which can be HUBSPOT_DEFINED, INTEGRATOR_DEFINED, or USER_DEFINED
+    "HUBSPOT_DEFINED"|"INTEGRATOR_DEFINED"|"USER_DEFINED"|"WORK" category;
+    # The maximum number of target object IDs that can be associated with a single source object
     int:Signed32 maxToObjectIds;
 };
 
+# Request object for updating an association definition's label and inverse label.
 public type PublicAssociationDefinitionUpdateRequest record {
+    # An optional descriptor for the inverse relationship between associated records
     string inverseLabel?;
+    # The unique identifier for the association type
     int:Signed32 associationTypeId;
+    # A descriptor that provides context about the relationship between associated records
     string? label;
 };
 
+# Detailed information about a specific error that occurred during an API request.
 public type ErrorDetail record {
     # A specific category that contains more specific detail about the error
     string subCategory?;
@@ -101,30 +151,48 @@ public type ErrorDetail record {
     string message;
 };
 
+# Defines the type, direction, and details of the relationship between two CRM objects
 public type AssociationSpecWithLabel record {
+    # An integer value used to uniquely identify a specific association type within its Association Category
     int:Signed32 typeId;
+    # An optional descriptor that provides additional context about the relationship between associated records, such as "Mentor" and "Mentee"
     string? label?;
-    "HUBSPOT_DEFINED"|"USER_DEFINED"|"INTEGRATOR_DEFINED" category;
+    # Association category. Can be HUBSPOT_DEFINED, USER_DEFINED, INTEGRATOR_DEFINED or WORK
+    "HUBSPOT_DEFINED"|"INTEGRATOR_DEFINED"|"USER_DEFINED"|"WORK" category;
 };
 
+# Response containing a collection of association specifications with labels.
 public type CollectionResponseAssociationSpecWithLabelNoPaging record {
+    # Array of association specifications with their corresponding labels.
     AssociationSpecWithLabel[] results;
 };
 
+# User-configurable settings for an association definition type.
 public type PublicAssociationDefinitionUserConfiguration record {
+    # The maximum number of target object IDs that a user can enforce in an association
     int:Signed32? userEnforcedMaxToObjectIds?;
+    # A unique integer identifier for the association type within its category
     int:Signed32 typeId;
+    # A descriptor providing context about the relationship between associated records
     string? label?;
-    "HUBSPOT_DEFINED"|"USER_DEFINED"|"INTEGRATOR_DEFINED" category;
+    # The category of the association, which can be HUBSPOT_DEFINED, INTEGRATOR_DEFINED, or USER_DEFINED
+    "HUBSPOT_DEFINED"|"INTEGRATOR_DEFINED"|"USER_DEFINED"|"WORK" category;
 };
 
+# Response containing results of a batch operation on association definition configurations.
 public type BatchResponsePublicAssociationDefinitionUserConfiguration record {
+    # The date and time when the batch operation was completed
     string completedAt;
+    # The date and time when the batch operation was requested
     string requestedAt?;
+    # The date and time when the batch operation started
     string startedAt;
+    # A collection of URLs linking to related documentation or resources associated with the batch operation
     record {|string...;|} links?;
+    # Array of association definition user configurations returned by the batch operation.
     PublicAssociationDefinitionUserConfiguration[] results;
-    "PENDING"|"PROCESSING"|"CANCELED"|"COMPLETE" status;
+    # The current status of the batch operation, which can be CANCELED, COMPLETE, PENDING, or PROCESSING
+    "CANCELED"|"COMPLETE"|"PENDING"|"PROCESSING" status;
 };
 
 # OAuth2 Refresh Token Grant Configs
@@ -134,25 +202,37 @@ public type OAuth2RefreshTokenGrantConfig record {|
     string refreshUrl = "https://api.hubapi.com/oauth/v1/token";
 |};
 
+# Batch request containing multiple association definition configuration updates.
 public type BatchInputPublicAssociationDefinitionConfigurationUpdateRequest record {
+    # Array of association definition configuration update requests to process.
     PublicAssociationDefinitionConfigurationUpdateRequest[] inputs;
 };
 
 # Provides API key configurations needed when communicating with a remote HTTP endpoint.
 public type ApiKeysConfig record {|
-    string privateAppLegacy;
+    string hapikey;
     string privateApp;
+    string privateAppLegacy;
 |};
 
+# Batch response for configuration updates including any errors that occurred.
 public type BatchResponsePublicAssociationDefinitionConfigurationUpdateResultWithErrors record {
+    # The date and time when the batch operation completed.
     string completedAt;
+    # The total number of errors encountered during the batch operation.
     int:Signed32 numErrors?;
+    # The date and time when the batch operation was requested.
     string requestedAt?;
+    # The date and time when the batch operation started processing.
     string startedAt;
+    # Map of URLs linking to related resources or documentation.
     record {|string...;|} links?;
+    # Array of successful configuration update results from the batch operation.
     PublicAssociationDefinitionConfigurationUpdateResult[] results;
+    # Array of errors that occurred during the batch operation.
     StandardError[] errors?;
-    "PENDING"|"PROCESSING"|"CANCELED"|"COMPLETE" status;
+    # Current processing status of the batch operation.
+    "CANCELED"|"COMPLETE"|"PENDING"|"PROCESSING" status;
 };
 
 # Provides a set of configurations for controlling the behaviours when communicating with a remote HTTP endpoint.
@@ -199,11 +279,16 @@ public type ConnectionConfig record {|
     boolean laxDataBinding = true;
 |};
 
+# Batch request containing multiple association definition configuration create requests.
 public type BatchInputPublicAssociationDefinitionConfigurationCreateRequest record {
+    # Array of association definition configuration create requests to process.
     PublicAssociationDefinitionConfigurationCreateRequest[] inputs;
 };
 
+# Defines an association type specification with its category and unique type identifier.
 public type PublicAssociationSpec record {
+    # A unique integer identifier for the specific association type within its category
     int:Signed32 typeId;
+    # Specifies the category of the association, which can be HUBSPOT_DEFINED, INTEGRATOR_DEFINED, or USER_DEFINED
     string category;
 };
